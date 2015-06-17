@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+<script>
+	var xhr = new XMLHttpRequest();
+	var button = document.createElement('button');
+	var index  = 0;
+	
+	xhr.onload = function(){
+		var html = xhr
+			.responseText
+			.replace(/<\s*head\s*>/i, '<head><base href="../../todomvc/examples/angularjs/" />');
+
+		document.open();
+		document.write(html);
+		document.close();
+		
+		button.textContent = 'Start';
+		button.addEventListener('click', performActionsAsync, false);
+		document.body.appendChild(button);
+
+	};
+	xhr.open('GET', '../../todomvc/examples/angularjs/index.html');
+	xhr.send();
+
+	function performActions () {
+		var loops = 101;
+		var todos = 4;
+		while(--loops) {
+			create(todos);
+			removeAll();
+		}
+		button.textContent = 'Start: OK';
+	}
+	function performActionsAsync () {
+		var loops = 101;
+		var todos = 4;
+		var fn    = create;		
+		function next () {
+			if (--loops === 0) {
+				button.textContent = 'Start: OK';
+				return;
+			}
+			fn();
+			fn = fn === create ? removeAll : create;
+			setTimeout(next, 100);
+		}
+		next();
+	}
+	function create () {
+		var count = 1;
+		var input = document.querySelector('#new-todo');
+		while(--count !== -1) {
+			input.value = 'Todo ' + (++index);
+			press(input, 13);
+		}
+	}
+	function removeAll () {
+		var arr = document.querySelectorAll('.destroy');
+		Array.prototype.slice.call(arr).forEach(function(el){
+			el.click();
+		});
+	}
+	function press (el){
+		var event = document.createEvent('Event'); 
+		event.initEvent('change', true, true); 
+		el.dispatchEvent(event);
+
+		var event = document.createEvent('Event'); 
+		event.initEvent('submit', true, true); 
+		el.parentNode.dispatchEvent(event);
+	}
+	
+</script>
+</body>
+</html>

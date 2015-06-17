@@ -1,0 +1,4 @@
+[submodule "todomvc"]
+	path = todomvc
+	url = https://github.com/tenbits/todomvc
+	branch = atmajs-update

@@ -46,7 +46,7 @@
 			}
 			fn();
 			fn = fn === create ? removeAll : create;
-			setTimeout(next, 100);
+			setTimeout(next, 0);
 		}
 		next();
 	}
